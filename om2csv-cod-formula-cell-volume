@@ -9,6 +9,8 @@
 
 #**
 
+echo "codid,chemical_formula_hill,_cod_vol,_cod_diffrpressure"
+
 jq -r '
     .data[] | [ 
         .id,
