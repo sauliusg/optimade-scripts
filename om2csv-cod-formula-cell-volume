@@ -9,14 +9,15 @@
 
 #**
 
-echo "codid,chemical_formula_hill,_cod_vol,_cod_diffrpressure"
+echo "codid,chemical_formula_hill,_cod_vol,_cod_diffrpressure,_cod_diffrtemp"
 
 jq -r '
     .data[] | [ 
         .id,
         .attributes.chemical_formula_hill,
         .attributes._cod_vol, 
-        .attributes._cod_diffrpressure
+        .attributes._cod_diffrpressure,
+        .attributes._cod_diffrtemp
     ]
     | @csv
 ' "$@"
