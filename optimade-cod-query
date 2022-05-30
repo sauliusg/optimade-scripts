@@ -15,7 +15,10 @@
 
 TMP_DIR="${TMPDIR}"
 
-test -z "${OPTIMADE_SLEEP_TIME}" && OPTIMADE_SLEEP_TIME=10
+# Set COD_OPTIMADE_SLEEP_TIME to different value in your environment
+# to change this default:
+
+test -z "${COD_OPTIMADE_SLEEP_TIME}" && COD_OPTIMADE_SLEEP_TIME=10
 
 set -ue
 ## set -x
