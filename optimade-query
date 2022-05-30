@@ -31,8 +31,50 @@ TMP_DIR="${TMPDIR}"
 
 test -z "${OPTIMADE_QUERY_SLEEP_TIME}" && OPTIMADE_QUERY_SLEEP_TIME=10
 
+FILES=""
+PROVIDER=""
+
 set -ue
 ## set -x
+
+#** USAGE:
+#**   $0 --options file1.inp files*.inp
+#**
+#** OPTIONS:
+#**  --provider cod           Specify which provider to query
+#**  --help                   print short help message (this message) and exit
+while [ $# -gt 0 ]
+do
+    case $1 in
+        --version|--versio|--versi|--vers|--ver|--ve|--v)
+            echo $Id
+            exit
+            ;;
+        --provider|--provide|--provid|--provi|--prov|--pro|--pr|--p)
+            PROVIDER="$2"
+            shift
+            ;;
+        --help|--hel|--he|--h)
+            awk '/#\*/,/#\*\*/ {
+                    sub("^ *#[*]?[*]?", ""); \
+                    gsub("\\$0","'$0'"); \
+                    print $0
+                }' $0
+	    exit
+	    ;;
+        --options|--option)
+            echo "$0: '--options' is a place-holder; " \
+                 "please use '$0 --help' to get the list of available options."
+            exit 2
+            ;;
+        -*) echo "$0: unknown option '$1'" >&2 ; exit 1 ;;
+        *)  FILES="$FILES '$1'" ;;
+    esac
+    shift
+done
+
+## echo ${FILES}
+eval set -- "${FILES}"
 
 declare -A providers
 
@@ -63,34 +105,37 @@ providers["twodmatpedia"]="http://optimade.2dmatpedia.org"
 
 FILTER="$1" # will report an error if the first argument is not defined
 
-OPTIMADE_SRV="https://www.crystallography.net/cod/optimade/v1"
-OPTIMADE_URI="${OPTIMADE_SRV}/structures"
-
 case "$0" in
     *-cod-*)
-        OPTIMADE_SRV="https://www.crystallography.net/cod/optimade/v1"
+        PROVIDER="cod"
         ;;
     *-tcod-*)
-        OPTIMADE_SRV="https://www.crystallography.net/tcod/optimade/v1"
+        PROVIDER="tcod"
         ;;
     *-aflow-*)
-        OPTIMADE_SRV="http://aflow.org/API/optimade/v1"
+        PROVIDER="aflow"
         ;;
     *-nomad-*)
-        OPTIMADE_SRV="http://nomad-lab.eu/prod/rae/optimade/v1"
+        PROVIDER="nmd"
         ;;
     *-omdb-*)
-        OPTIMADE_SRV="http://optimade.openmaterialsdb.se/v1"
+        PROVIDER="omdb_production"
         ;;
     *-mp-*)
-        OPTIMADE_SRV="https://optimade.materialsproject.org/v1"
-        ;;
-    *)
-        PROVIDER=$(basename $0 | awk -F- '{print $2}')
-        OPTIMADE_SRV="${providers[${PROVIDER}]}/v1"
+        PROVIDER="mp"
         ;;
 esac
 
+if [ "${PROVIDER}" = "" ]
+then
+    NCOMPONENTS=$(basename $0 | awk -F- '{print NF}')
+    if [ $NCOMPONENTS -gt 3 ]
+    then
+        PROVIDER=$(basename $0 | awk -F- '{print $2}')
+    fi
+fi
+
+OPTIMADE_SRV="${providers[${PROVIDER}]}/v1"
 OPTIMADE_URI="${OPTIMADE_SRV}/structures"
 
 BASENAME="$(basename $0)"
