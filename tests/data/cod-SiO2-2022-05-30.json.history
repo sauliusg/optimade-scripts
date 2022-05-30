@@ -1,0 +1,1 @@
+  680  ( set -x; directory-metadata; ./optimade-cod-query 'elements+HAS+ALL+"Mg","O"+AND+nelements=2' > tests/data/cod-SiO2-$(date +%F).json ; date ) &> tests/data/cod-SiO2-$(date +%F).json.log

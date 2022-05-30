@@ -1,0 +1,36 @@
++ directory-metadata
++ whoami
+saulius
++ hostname -f
+starta
++ pwd
+/home/saulius/src/optimade-scripts
++ svn info
+Path: .
+Working Copy Root Path: /home/saulius/src/optimade-scripts
+URL: svn+ssh://saulius.grazulis.lt/home/saulius/svn-repositories/optimade-scripts/trunk
+Relative URL: ^/trunk
+Repository Root: svn+ssh://saulius.grazulis.lt/home/saulius/svn-repositories/optimade-scripts
+Repository UUID: 55f55b13-5e0c-468a-8e83-accfe0baf4a3
+Revision: 12
+Node Kind: directory
+Schedule: normal
+Last Changed Author: saulius
+Last Changed Rev: 12
+Last Changed Date: 2022-05-30 10:29:59 +0300 (Mon, 30 May 2022)
+
++ df -h .
+Filesystem      Size  Used Avail Use% Mounted on
+/dev/nvme1n1p1  938G  629G  263G  71% /home
++ type osname
+osname is /home/saulius/scripts/osname
++ osname
+Linuxmint-20.1
++ uname -a
+Linux starta 5.8.0-45-generic #51~20.04.1-Ubuntu SMP Tue Feb 23 13:46:31 UTC 2021 x86_64 x86_64 x86_64 GNU/Linux
++ date
+2022-05-30T10:38:04 EEST
++ ./optimade-cod-query 'elements+HAS+ALL+"Mg","O"+AND+nelements=2'
+++ date +%F
++ date
+2022-05-30T10:38:39 EEST
