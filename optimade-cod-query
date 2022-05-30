@@ -55,6 +55,12 @@ case "$0" in
     *-nomad-*)
         OPTIMADE_SRV="http://nomad-lab.eu/prod/rae/optimade/v1"
         ;;
+    *-materialscloud-*)
+        OPTIMADE_SRV="https://.../v1"
+        ;;
+    *-omdb-*)
+        OPTIMADE_SRV="http://optimade.openmaterialsdb.se/v1"
+        ;;
 esac
 
 OPTIMADE_URI="${OPTIMADE_SRV}/structures"
