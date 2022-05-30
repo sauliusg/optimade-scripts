@@ -53,7 +53,7 @@ case "$0" in
         OPTIMADE_SRV="https://aiida.materialscloud.org/optimade-sample/optimade/v1"
         ;;
     *-nomad-*)
-        OPTIMADE_SRV="https://providers.optimade.org/index-metadbs/nmd"
+        OPTIMADE_SRV="http://nomad-lab.eu/v1"
         ;;
 esac
 
