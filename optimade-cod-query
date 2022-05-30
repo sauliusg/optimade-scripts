@@ -28,27 +28,32 @@ TMP_DIR="${TMPDIR}"
 # Set COD_OPTIMADE_SLEEP_TIME to different value in your environment
 # to change this default:
 
-test -z "${COD_OPTIMADE_SLEEP_TIME}" && COD_OPTIMADE_SLEEP_TIME=10
+test -z "${OPTIMADE_QUERY_SLEEP_TIME}" && OPTIMADE_QUERY_SLEEP_TIME=10
 
 set -ue
 ## set -x
 
 FILTER="$1" # will report an error if the first argument is not defined
 
-OPTIMADE_URI="https://www.crystallography.net/cod/optimade/v1/structures"
+OPTIMADE_SRV="https://www.crystallography.net/cod/optimade/v1"
+OPTIMADE_URI="${OPTIMADE_SRV}/structures"
 
 case "$0" in
     *-cod-*)
-        OPTIMADE_URI="https://www.crystallography.net/cod/optimade/v1/structures"
+        OPTIMADE_SRV="https://www.crystallography.net/cod/optimade/v1"
+        OPTIMADE_URI="${OPTIMADE_SRV}/structures"
         ;;
     *-tcod-*)
-        OPTIMADE_URI="https://www.crystallography.net/tcod/optimade/v1/structures"
+        OPTIMADE_SRV="https://www.crystallography.net/tcod/optimade/v1"
+        OPTIMADE_URI="${OPTIMADE_SRV}/structures"
         ;;
     *-aflow-*)
-        OPTIMADE_URI="http://aflow.org/API/optimade/v1/structures"
+        OPTIMADE_SRV="http://aflow.org/API/optimade/v1"
+        OPTIMADE_URI="${OPTIMADE_SRV}/structures"
         ;;
     *-matcloud-*)
-        OPTIMADE_URI="https://aiida.materialscloud.org/optimade-sample/optimade/v1/structures"
+        OPTIMADE_SRV="https://aiida.materialscloud.org/optimade-sample/optimade/v1"
+        OPTIMADE_URI="${OPTIMADE_SRV}/structures"
         ;;        
 esac
 
@@ -74,6 +79,11 @@ CURRENT_URI="${OPTIMADE_URI}?filter=$FILTER"
 
 while [ $MORE_DATA = true ]
 do
+    if [ "${OPTIMADE_QUERY_VERBOSE}" ]
+    then
+        echo "$0: NOTE, querying '${CURRENT_URI}'" >&2
+    fi
+    
     curl -sSL -D "${TMP_HEADER}" "${CURRENT_URI}" > "${TMP_RESPONSE}"
 
     STATUS="$?"
@@ -90,11 +100,23 @@ do
     MORE_DATA=$(jq -r '.meta.more_data_available' "${TMP_RESPONSE}")
     CURRENT_URI=$(jq -r '.links.next.href' "${TMP_RESPONSE}")
 
+    if [[ "${CURRENT_URI}" = null ]]
+    then
+        CURRENT_URI=$(jq -r '.meta.next' "${TMP_RESPONSE}")
+    fi
+    
+    if ! [[ "${CURRENT_URI}" =~ ^http ]]
+    then
+        CURRENT_URI="${OPTIMADE_SRV}${CURRENT_URI}"
+    fi
+    
     ## echo $0: MORE_DATA=${MORE_DATA} NEXT_URI="${CURRENT_URI}"
 
     cat "${TMP_RESPONSE}"
 
-    sleep ${COD_OPTIMADE_SLEEP_TIME}
+    rm -f "${TMP_RESPONSE}"
+    
+    sleep ${OPTIMADE_QUERY_SLEEP_TIME}
     
     ## MORE_DATA=false
 done
