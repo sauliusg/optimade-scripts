@@ -27,6 +27,21 @@ FILTER="$1" # will report an error if the first argument is not defined
 
 OPTIMADE_URI="https://www.crystallography.net/cod/optimade/v1/structures"
 
+case "$0" in
+    *-cod-*)
+        OPTIMADE_URI="https://www.crystallography.net/cod/optimade/v1/structures"
+        ;;
+    *-tcod-*)
+        OPTIMADE_URI="https://www.crystallography.net/tcod/optimade/v1/structures"
+        ;;
+    *-aflow-*)
+        OPTIMADE_URI="http://aflow.org/API/optimade/v1/structures"
+        ;;
+    *-matcloud-*)
+        OPTIMADE_URI="https://aiida.materialscloud.org/optimade-sample/optimade/v1/structures"
+        ;;        
+esac
+
 BASENAME="$(basename $0)"
 
 test -z "${TMP_DIR}" && TMP_DIR="/tmp"
