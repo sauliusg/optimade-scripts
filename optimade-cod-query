@@ -19,6 +19,7 @@
 #    materials data (2021) Scientific Data , Vol. 8, No. 1 Springer
 #    Science and Business Media LLC p. 1-10, DOI:
 #    https://doi.org/10.1038/s41597-021-00974-z
+#**
 
 # DEPENDENCIES:
 # this script uses 'curl' and 'jq' commands.
