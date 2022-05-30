@@ -180,24 +180,28 @@ do
     fi
     
     MORE_DATA=$(jq -r '.meta.more_data_available' "${TMP_RESPONSE}")
-    CURRENT_URI=$(jq -r '.links.next' "${TMP_RESPONSE}")
 
-    if [[ "${CURRENT_URI}" =~ '"href":' ]]
+    if [ "${MORE_DATA}" = true ]
     then
-        CURRENT_URI=$(jq -r '.links.next.href' "${TMP_RESPONSE}")
-    fi
+        CURRENT_URI=$(jq -r '.links.next' "${TMP_RESPONSE}")
 
-    if [[ "${CURRENT_URI}" = null ]]
-    then
-        CURRENT_URI=$(jq -r '.meta.next' "${TMP_RESPONSE}")
+        if [[ "${CURRENT_URI}" =~ '"href":' ]]
+        then
+            CURRENT_URI=$(jq -r '.links.next.href' "${TMP_RESPONSE}")
+        fi
+
+        if [[ "${CURRENT_URI}" = null ]]
+        then
+            CURRENT_URI=$(jq -r '.meta.next' "${TMP_RESPONSE}")
+        fi
+        
+        if ! [[ "${CURRENT_URI}" =~ ^http ]]
+        then
+            CURRENT_URI="${OPTIMADE_SRV}${CURRENT_URI}"
+        fi
+        
+        ## echo $0: MORE_DATA=${MORE_DATA} NEXT_URI="${CURRENT_URI}"
     fi
-    
-    if ! [[ "${CURRENT_URI}" =~ ^http ]]
-    then
-        CURRENT_URI="${OPTIMADE_SRV}${CURRENT_URI}"
-    fi
-    
-    ## echo $0: MORE_DATA=${MORE_DATA} NEXT_URI="${CURRENT_URI}"
 
     cat "${TMP_RESPONSE}"
 
