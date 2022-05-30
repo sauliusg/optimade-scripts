@@ -42,21 +42,22 @@ OPTIMADE_URI="${OPTIMADE_SRV}/structures"
 case "$0" in
     *-cod-*)
         OPTIMADE_SRV="https://www.crystallography.net/cod/optimade/v1"
-        OPTIMADE_URI="${OPTIMADE_SRV}/structures"
         ;;
     *-tcod-*)
         OPTIMADE_SRV="https://www.crystallography.net/tcod/optimade/v1"
-        OPTIMADE_URI="${OPTIMADE_SRV}/structures"
         ;;
     *-aflow-*)
         OPTIMADE_SRV="http://aflow.org/API/optimade/v1"
-        OPTIMADE_URI="${OPTIMADE_SRV}/structures"
         ;;
     *-matcloud-*)
         OPTIMADE_SRV="https://aiida.materialscloud.org/optimade-sample/optimade/v1"
-        OPTIMADE_URI="${OPTIMADE_SRV}/structures"
-        ;;        
+        ;;
+    *-nomad-*)
+        OPTIMADE_SRV="https://providers.optimade.org/index-metadbs/nmd"
+        ;;
 esac
+
+OPTIMADE_URI="${OPTIMADE_SRV}/structures"
 
 BASENAME="$(basename $0)"
 
@@ -80,7 +81,7 @@ CURRENT_URI="${OPTIMADE_URI}?filter=$FILTER"
 
 while [ $MORE_DATA = true ]
 do
-    if [ "${OPTIMADE_QUERY_VERBOSE}" ]
+    if [ -n "${OPTIMADE_QUERY_VERBOSE:-""}" ]
     then
         echo "$0: NOTE, querying '${CURRENT_URI}'" >&2
     fi
