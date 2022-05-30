@@ -49,17 +49,14 @@ case "$0" in
     *-aflow-*)
         OPTIMADE_SRV="http://aflow.org/API/optimade/v1"
         ;;
-    *-matcloud-*)
-        OPTIMADE_SRV="https://aiida.materialscloud.org/optimade-sample/optimade/v1"
-        ;;
     *-nomad-*)
         OPTIMADE_SRV="http://nomad-lab.eu/prod/rae/optimade/v1"
         ;;
-    *-materialscloud-*)
-        OPTIMADE_SRV="https://.../v1"
-        ;;
     *-omdb-*)
         OPTIMADE_SRV="http://optimade.openmaterialsdb.se/v1"
+        ;;
+    *-mp-*)
+        OPTIMADE_SRV="https://optimade.materialsproject.org/v1"
         ;;
 esac
 
@@ -96,7 +93,7 @@ do
 
     STATUS="$?"
     if ! [ $STATUS -eq 0 ] ||
-       ! head -n 1 "${TMP_HEADER}" | grep -q '200 OK'
+       ! cat "${TMP_HEADER}" | grep -qP '200 OK|HTTP/2\s*200'
     then
         echo "$0: ERROR, curl could not fetch data from '${CURRENT_URI}':" >&2
         echo "$0: curl return status = '$STATUS'" >&2
@@ -133,3 +130,28 @@ do
     
     ## MORE_DATA=false
 done
+
+# "aflow","http://aflow.org/API/optimade/"
+# "cod","https://www.crystallography.net/cod/optimade"
+# "sssp","https://aiida.materialscloud.org/sssplibrary/optimade"
+# "2dstructures","https://aiida.materialscloud.org/2dstructures/optimade"
+# "2dtopo","https://aiida.materialscloud.org/2dtopo/optimade"
+# "tc-applicability","https://aiida.materialscloud.org/tc-applicability/optimade"
+# "threedd","https://aiida.materialscloud.org/3dd/optimade"
+# "mc3d-structures","https://aiida.materialscloud.org/mc3d-structures/optimade"
+# "scdm","https://aiida.materialscloud.org/autowannier/optimade"
+# "curated-cofs","https://aiida.materialscloud.org/curated-cofs/optimade"
+# "optimade-sample","https://aiida.materialscloud.org/optimade-sample/optimade"
+# "stoceriaitf","https://aiida.materialscloud.org/stoceriaitf/optimade"
+# "pyrene-mofs","https://aiida.materialscloud.org/pyrene-mofs/optimade"
+# "li-ion-conductors","https://aiida.materialscloud.org/li-ion-conductors/optimade"
+# "tin-antimony-sulfoiodide","https://aiida.materialscloud.org/tin-antimony-sulfoiodide/optimade"
+# "mp","https://optimade.materialsproject.org"
+# "mpds","https://api.mpds.io"
+# "nmd","https://nomad-lab.eu/prod/rae/optimade/"
+# "odbx","https://optimade.odbx.science"
+# "omdb_production","http://optimade.openmaterialsdb.se"
+# "oqmd","http://oqmd.org/optimade/"
+# "jarvis","https://jarvis.nist.gov/optimade/jarvisdft"
+# "tcod","https://www.crystallography.net/tcod/optimade"
+# "twodmatpedia","http://optimade.2dmatpedia.org"
