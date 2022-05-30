@@ -175,6 +175,7 @@ do
         echo "$0: curl return status = '$STATUS'" >&2
         echo "$0: HTTP header:" >&2
         cat "${TMP_HEADER}" | awk '{print " ",$0}' >&2
+        cat "${TMP_RESPONSE}" >&2
         exit 2
     fi
     
