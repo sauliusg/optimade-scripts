@@ -1,0 +1,20 @@
+#!/bin/bash
+
+#*
+# Extract the specified values from the OPTIMADE JSON responses
+
+# USAGE:
+#     $0 optimade.json
+#     ./optimade-cod-query | $0
+
+#**
+
+jq -r '
+    .data[] | [ 
+        .id,
+        .attributes.chemical_formula_hill,
+        .attributes._cod_vol, 
+        .attributes._cod_diffrpressure
+    ]
+    | @csv
+' "$@"
